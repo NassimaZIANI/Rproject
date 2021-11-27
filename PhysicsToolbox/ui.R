@@ -17,17 +17,32 @@ shinyUI(fluidPage(
     
     sidebarLayout(
         sidebarPanel(
-            fileInput("file1", "Choose CSV File",
-                      accept = c(
-                          "text/csv",
-                          "text/comma-separated-values,text/plain",
-                          ".csv")
-            ),
-            tags$hr(),
-            checkboxInput("header", "Header", TRUE)
+            selectInput(inputId = "dataset",label = "Choose a dataset : ",choices = c("omov", "xmov", "walkmov")),
+            sliderInput("meanthresh", 
+                        "Left rolling average threeshold", 
+                        min = 0,
+                        max = 1, 
+                        value = 0.5),
+            sliderInput("sdthresh", 
+                        "Left rolling standard deviation threeshold", 
+                        min = 0,
+                        max = 1, 
+                        value = 0.2),
+            sliderInput("timethresh", 
+                        "Time threeshold", 
+                        min = 0,
+                        max = 1, 
+                        value = 0.2),
+            numericInput("obs", "Number of observations to view:", 5),
+            
+            textInput("label", "Chose a label", "movement"),
+            
+            downloadButton("downloadData", "Download")
         ),
         mainPanel(
-            tableOutput("contents")
+            h3(textOutput("title")), 
+            tableOutput("view"),
+            plotOutput("graph",height="350px")
         )
     )
 )
